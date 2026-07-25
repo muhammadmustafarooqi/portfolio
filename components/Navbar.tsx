@@ -1,11 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoArrowForwardOutline } from "react-icons/io5";
 
 export const Navbar: React.FC = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="nav">
+    <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
       {/* Brand Logo */}
       <div className="logo">
         <a href="#about" className="logo-link">
@@ -35,9 +45,9 @@ export const Navbar: React.FC = () => {
       {/* Premium Action CTA Button */}
       <div className="nav-cta">
         <a href="#contact" className="cta-button">
-          <span>Let&apos;s Talk</span>
+          <span>Let's Talk</span>
           <div className="cta-button-icon">
-            <IoArrowForwardOutline size={13} />
+            <IoArrowForwardOutline size={16} />
           </div>
         </a>
       </div>

@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Muhammad Mustafa Hussain || Full-Stack Developer Portfolio",
   description:
     "Full-Stack Software Engineer specializing in MERN Stack, Next.js, REST APIs & Creative Web Animations.",
   icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" }
-    ],
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     shortcut: "/icon.svg",
     apple: "/icon.svg",
   },
@@ -24,7 +23,9 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
       </head>
-      <body>{children}</body>
+      <body>
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

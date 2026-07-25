@@ -8,6 +8,36 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom & Premium Ultra-Sleek Dark Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 100px;
+  border: 1px solid #050505;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) #050505;
+}
+
 body {
   font-family: "PP Neue Montreal", "Plus Jakarta Sans", sans-serif;
   background-color: #000;
@@ -277,7 +307,17 @@ p {
   pointer-events: auto;
   opacity: 0;
   transform: translateY(-30px);
-  will-change: transform, opacity;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, background-color;
+}
+
+.nav.scrolled {
+  background: rgba(8, 8, 8, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 3rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* Brand Logo */
@@ -765,7 +805,400 @@ p {
   margin-top: 0.15rem;
 }
 
+/* Projects Section Styling - Full Width Magazine Editorial Layout */
+.projects-section {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  padding: 8rem 4rem;
+  background-color: #050505;
+  color: #ffffff;
+  z-index: 10;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.projects-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.projects-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.projects-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.projects-title {
+  text-align: left;
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.projects-title span {
+  font-family: "PP Editorial Old", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  color: #ffffff;
+}
+
+.projects-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: none;
+  font-weight: 300;
+  max-width: 700px;
+}
+
+.project-filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.filter-btn.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* Full-Width Editorial Rows Showcase */
+.editorial-projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.editorial-project-row {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(15, 15, 15, 0.7);
+  border-radius: 28px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, border-color, box-shadow;
+}
+
+.editorial-project-row:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(22, 22, 22, 0.85);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65);
+  transform: translateY(-4px);
+}
+
+.row-ambient-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+.row-content-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 3rem;
+  padding: 3rem;
+  align-items: center;
+}
+
+/* Left Column */
+.row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.row-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.row-num {
+  font-family: "PP Editorial Old", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 2.4rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.row-tagline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.row-title {
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.row-pitch {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  text-transform: none;
+  font-weight: 300;
+}
+
+/* Row Stack Pills */
+.row-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.tech-pill {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.35rem 0.8rem;
+  border-radius: 100px;
+}
+
+/* Highlights */
+.row-highlights {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.row-highlights li {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: none;
+  font-weight: 300;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.highlight-bullet {
+  color: #F59E0B;
+  font-size: 11px;
+  margin-top: 0.1rem;
+}
+
+/* Metric Box */
+.metric-placeholder-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.1rem;
+  background: rgba(245, 158, 11, 0.05);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border-radius: 14px;
+  font-size: 11px;
+  font-family: monospace;
+  color: #FBBF24;
+}
+
+/* Right Column */
+.row-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.preview-panel {
+  width: 100%;
+  height: 200px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+
+.editorial-project-row:hover .preview-panel {
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.panel-badge-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.domain-pill {
+  font-family: monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.badge-live-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #10B981;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.25rem 0.65rem;
+  border-radius: 100px;
+}
+
+.live-dot-green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+}
+
+.badge-private-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #F59E0B;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.25rem 0.65rem;
+  border-radius: 100px;
+}
+
+.panel-center-graphic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: auto;
+}
+
+.graphic-symbol {
+  font-family: "PP Editorial Old", "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.graphic-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+.row-action {
+  margin-top: auto;
+}
+
+.row-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1.6rem;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.row-link-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.25);
+}
+
+.row-link-btn:hover .arrow-icon {
+  transform: translate(3px, -3px);
+}
+
+.row-private-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.4rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 @media (max-width: 1024px) {
+  .row-content-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  .row-right {
+    align-items: flex-start;
+  }
   .about-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
@@ -776,7 +1209,8 @@ p {
 }
 
 @media (max-width: 768px) {
-  .about-section {
+  .about-section,
+  .projects-section {
     padding: 5rem 1.5rem;
   }
   .skills-container {

@@ -7,6 +7,7 @@ import { Preloader } from "@/components/Preloader";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
+import { Projects } from "@/components/Projects";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -148,6 +149,7 @@ export default function Home() {
         <Hero />
       </div>
       <About />
+      <Projects />
     </main>
   );
 }
