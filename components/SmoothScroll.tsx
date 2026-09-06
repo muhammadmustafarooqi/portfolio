@@ -10,6 +10,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       const anchor = target.closest("a[href^='#']");
       if (anchor) {
         const href = anchor.getAttribute("href");
+        if (href === "#" || href === "#top") {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
         if (href && href.startsWith("#") && href.length > 1) {
           const targetEl = document.querySelector(href);
           if (targetEl) {

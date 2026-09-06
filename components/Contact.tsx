@@ -21,23 +21,23 @@ export const Contact: React.FC = () => {
             </p>
 
             <div className="contact-methods">
-              <a href="mailto:mustafahussain.dev@gmail.com" className="contact-card">
+              <a href="mailto:muhammadmustafafarooqi.296@gmail.com" className="contact-card">
                 <div className="contact-card-icon">
                   <FaEnvelope size={20} />
                 </div>
                 <div className="contact-card-text">
                   <span>Direct Email</span>
-                  <p>mustafahussain.dev@gmail.com</p>
+                  <p>muhammadmustafafarooqi.296@gmail.com</p>
                 </div>
               </a>
 
-              <a href="https://wa.me/923000000000" target="_blank" rel="noopener noreferrer" className="contact-card">
+              <a href="https://wa.me/923362601166" target="_blank" rel="noopener noreferrer" className="contact-card">
                 <div className="contact-card-icon">
                   <FaWhatsapp size={20} />
                 </div>
                 <div className="contact-card-text">
                   <span>WhatsApp Chat</span>
-                  <p>+92 (Pakistani Market & Global)</p>
+                  <p>+92 336 2601166</p>
                 </div>
               </a>
             </div>

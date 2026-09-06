@@ -18,7 +18,7 @@ export const Navbar: React.FC = () => {
     <nav className={`nav ${scrolled ? "scrolled" : ""}`}>
       {/* Brand Logo */}
       <div className="logo">
-        <a href="#about" className="logo-link">
+        <a href="#" className="logo-link">
           <span className="logo-mark">M</span>
           <span className="logo-name">
             Muhammad <span>Mustafa</span>
