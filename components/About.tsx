@@ -322,7 +322,7 @@ export const About: React.FC = () => {
             </p>
 
             {/* Experience & Education Cards */}
-            <div className="experience-cards">
+            <div id="experience" className="experience-cards">
               <div className="exp-card">
                 <div className="exp-icon">
                   <FaBriefcase />

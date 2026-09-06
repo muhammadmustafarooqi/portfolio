@@ -4,20 +4,25 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { IoArrowForwardOutline, IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
 
-import img1 from "../assets/istockphoto-1462119292-2048x2048.jpg";
-import img2 from "../assets/muthia-ashifa-salsabella-NXEi84bhtq0-unsplash.jpg";
-import img3 from "../assets/istockphoto-2172442212-2048x2048.jpg";
-import img4 from "../assets/image.jpg";
-
-const heroImages = [img1, img2, img3, img4];
+const heroImages = [
+  "/New folder (2)/01_portfolio_photo.png",
+  "/New folder (2)/03_portfolio_photo.png",
+  "/New folder (2)/05_portfolio_photo.png",
+  "/New folder (2)/06_portfolio_photo.png",
+  "/New folder (2)/08_portfolio_photo.png",
+  "/New folder (2)/10_portfolio_photo.png",
+  "/New folder (2)/13_portfolio_photo.png",
+  "/New folder (2)/15_portfolio_photo.png",
+];
 
 export const Hero: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Auto-play interval for background slider (changes slide every 5 seconds)
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
-    }, 4500);
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
 
@@ -31,7 +36,7 @@ export const Hero: React.FC = () => {
 
   return (
     <>
-      {/* Background Image Carousel */}
+      {/* Background Image Carousel with Fade & Zoom Animation */}
       <div className="hero-img-slider">
         <div className="hero-overlay-vignette"></div>
         {heroImages.map((img, index) => (
@@ -41,22 +46,27 @@ export const Hero: React.FC = () => {
           >
             <Image
               src={img}
-              alt={`Showcase Image ${index + 1}`}
+              alt={`Portfolio Showcase ${index + 1}`}
               priority={index === 0}
+              unoptimized
               fill
               sizes="100vw"
+              className="hero-img"
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
           </div>
         ))}
 
-        {/* Carousel Navigation & Counter */}
+        {/* Carousel Navigation Controls & Counter */}
         <div className="hero-slider-controls">
           <button onClick={prevSlide} className="slider-arrow" aria-label="Previous Slide">
             <IoChevronBackOutline size={15} />
           </button>
           <div className="slider-counter">
-            <span>0{currentSlide + 1}</span> / <span>0{heroImages.length}</span>
+            <span className="slider-counter-num">
+              {String(currentSlide + 1).padStart(2, "0")}
+            </span>{" "}
+            / <span>{String(heroImages.length).padStart(2, "0")}</span>
           </div>
           <button onClick={nextSlide} className="slider-arrow" aria-label="Next Slide">
             <IoChevronForwardOutline size={15} />
@@ -82,14 +92,14 @@ export const Hero: React.FC = () => {
         </div>
       </div>
 
-      <div className="cta">
+      <a href="#projects" className="cta">
         <div className="cta-lable">
           <p>Explore Projects</p>
         </div>
         <div className="cta-icon">
           <IoArrowForwardOutline size={22} />
         </div>
-      </div>
+      </a>
     </>
   );
 };

@@ -8,6 +8,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Projects } from "@/components/Projects";
+import { Contact } from "@/components/Contact";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP);
@@ -18,6 +19,9 @@ export default function Home() {
 
   useGSAP(
     () => {
+      // Set initial hidden positions for hero text
+      gsap.set([".line h1", ".line p"], { y: "120%" });
+
       const tl = gsap.timeline({
         delay: 0.2,
         onComplete: () => console.log("Preloader sequence finished"),
@@ -150,6 +154,7 @@ export default function Home() {
       </div>
       <About />
       <Projects />
+      <Contact />
     </main>
   );
 }
