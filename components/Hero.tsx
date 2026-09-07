@@ -78,7 +78,7 @@ export const Hero: React.FC = () => {
         <div className="hero-copy">
           <div className="line">
             <h1>
-              <span>Crafting</span> digital,
+              <span>Crafting</span> digital
             </h1>
           </div>
           <div className="line">

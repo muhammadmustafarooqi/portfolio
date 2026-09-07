@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { IoArrowForwardOutline } from "react-icons/io5";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -42,8 +43,26 @@ export const Navbar: React.FC = () => {
         </a>
       </div>
 
-      {/* Premium Action CTA Button */}
+      {/* Premium Action CTA Button & Socials */}
       <div className="nav-cta">
+        <a
+          href="https://github.com/muhammadmustafarooqi"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-social-btn"
+          aria-label="GitHub Profile"
+        >
+          <FaGithub size={16} />
+        </a>
+        <a
+          href="https://www.linkedin.com/in/muhammad-mustafa-hussain-72b003274/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-social-btn"
+          aria-label="LinkedIn Profile"
+        >
+          <FaLinkedin size={16} />
+        </a>
         <a href="#contact" className="cta-button">
           <span>Let's Talk</span>
           <div className="cta-button-icon">

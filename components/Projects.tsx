@@ -1,11 +1,19 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { FaLock } from "react-icons/fa";
+import { FaLock, FaChevronDown, FaArrowRightLong } from "react-icons/fa6";
 import { FiArrowUpRight } from "react-icons/fi";
+import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperClass } from "swiper";
+import { EffectCoverflow, Mousewheel, Pagination } from "swiper/modules";
+
+// Swiper CSS styles
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -25,15 +33,68 @@ interface Project {
   metricPlaceholder?: string;
   tagline: string;
   accentGradient: string;
+  bgSymbol: string;
 }
 
 export const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<"all" | "ecommerce" | "ai" | "analytics">("all");
-  const [displayedFilter, setDisplayedFilter] = useState<"all" | "ecommerce" | "ai" | "analytics">("all");
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const isAnimatingTab = useRef(false);
+  const swiperRef = useRef<SwiperClass | null>(null);
+
+  // Dual Touch Listener: handles both Vertical (scroll up/down) & Horizontal (swipe left/right) on mobile
+  const touchStartY = useRef<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartY.current === null || touchStartX.current === null || !swiperRef.current) return;
+
+    const touchEndY = e.changedTouches[0].clientY;
+    const touchEndX = e.changedTouches[0].clientX;
+
+    const diffY = touchStartY.current - touchEndY; // Positive = Swiped UP (scrolling down)
+    const diffX = touchStartX.current - touchEndX; // Positive = Swiped LEFT
+
+    const swiper = swiperRef.current;
+    const isFirst = swiper.isBeginning;
+    const isLast = swiper.isEnd;
+
+    // Threshold of 35px to trigger slide transition
+    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 35) {
+      // Vertical gesture (finger moving UP = scroll DOWN; finger moving DOWN = scroll UP)
+      if (diffY > 0 && !isLast) {
+        swiper.slideNext();
+      } else if (diffY < 0 && !isFirst) {
+        swiper.slidePrev();
+      }
+    } else if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 35) {
+      // Horizontal gesture
+      if (diffX > 0 && !isLast) {
+        swiper.slideNext();
+      } else if (diffX < 0 && !isFirst) {
+        swiper.slidePrev();
+      }
+    }
+
+    touchStartY.current = null;
+    touchStartX.current = null;
+  };
 
   const projectsData: Project[] = [
     {
@@ -53,7 +114,8 @@ export const Projects: React.FC = () => {
       ],
       link: "https://kaarvan.pk",
       metricPlaceholder: "[ADD METRIC: e.g. Total Orders / Revenue Growth]",
-      accentGradient: "linear-gradient(135deg, rgba(217, 119, 6, 0.15) 0%, rgba(20, 20, 20, 0.8) 100%)",
+      accentGradient: "linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(20, 20, 20, 0.95) 100%)",
+      bgSymbol: "K",
     },
     {
       id: "allinone",
@@ -72,7 +134,8 @@ export const Projects: React.FC = () => {
       ],
       link: "https://allinonestore.pk",
       metricPlaceholder: "[ADD METRIC: e.g. Monthly Conversion Rate / Cart Recovery %]",
-      accentGradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(20, 20, 20, 0.8) 100%)",
+      accentGradient: "linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(20, 20, 20, 0.95) 100%)",
+      bgSymbol: "A",
     },
     {
       id: "shipcart",
@@ -89,7 +152,8 @@ export const Projects: React.FC = () => {
       ],
       link: "https://cartship.pk",
       metricPlaceholder: "[ADD METRIC: e.g. Checkout Engagement / Coupon Redemption %]",
-      accentGradient: "linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(20, 20, 20, 0.8) 100%)",
+      accentGradient: "linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(20, 20, 20, 0.95) 100%)",
+      bgSymbol: "S",
     },
     {
       id: "swiftdailypicks",
@@ -106,7 +170,8 @@ export const Projects: React.FC = () => {
       ],
       isPrivate: true,
       metricPlaceholder: "[ADD METRIC: e.g. Daily Active Users / Line Accuracy %]",
-      accentGradient: "linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(20, 20, 20, 0.8) 100%)",
+      accentGradient: "linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(20, 20, 20, 0.95) 100%)",
+      bgSymbol: "P",
     },
     {
       id: "kodezi",
@@ -122,61 +187,68 @@ export const Projects: React.FC = () => {
       ],
       isPrivate: true,
       metricPlaceholder: "[ADD METRIC: e.g. Code Completion Latency / Active Developers]",
-      accentGradient: "linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(20, 20, 20, 0.8) 100%)",
+      accentGradient: "linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(20, 20, 20, 0.95) 100%)",
+      bgSymbol: "AI",
     },
   ];
 
   const filteredProjects =
-    displayedFilter === "all" ? projectsData : projectsData.filter((p) => p.category === displayedFilter);
+    activeFilter === "all"
+      ? projectsData
+      : projectsData.filter((p) => p.category === activeFilter);
 
-  const handleFilterChange = (newFilter: "all" | "ecommerce" | "ai" | "analytics") => {
-    if (newFilter === activeFilter || isAnimatingTab.current) return;
-    setActiveFilter(newFilter);
-    isAnimatingTab.current = true;
+  // GSAP animation triggered on active slide transition start (matching landing-27)
+  const triggerSlideAnimations = (swiper: SwiperClass) => {
+    setActiveSlideIndex(swiper.activeIndex);
+    const activeSlide = swiper.slides[swiper.activeIndex];
+    if (!activeSlide) return;
 
-    const cards = listRef.current?.querySelectorAll(".editorial-project-row");
-    if (!cards || cards.length === 0) {
-      setDisplayedFilter(newFilter);
-      isAnimatingTab.current = false;
-      return;
+    const num = activeSlide.querySelector(".row-num");
+    const tagline = activeSlide.querySelector(".row-tagline");
+    const title = activeSlide.querySelector(".row-title");
+    const pitch = activeSlide.querySelector(".row-pitch");
+    const stackPills = activeSlide.querySelectorAll(".tech-pill");
+    const highlights = activeSlide.querySelectorAll(".row-highlights li");
+    const preview = activeSlide.querySelector(".preview-panel");
+    const actionBtn = activeSlide.querySelector(".row-action");
+
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    if (num) {
+      tl.fromTo(num, { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6 }, 0);
     }
-
-    gsap.to(cards, {
-      opacity: 0,
-      y: 15,
-      duration: 0.22,
-      stagger: 0.03,
-      ease: "power2.in",
-      onComplete: () => {
-        setDisplayedFilter(newFilter);
-      },
-    });
+    if (tagline) {
+      tl.fromTo(tagline, { y: -15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 0.1);
+    }
+    if (title) {
+      tl.fromTo(title, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 0.15);
+    }
+    if (pitch) {
+      tl.fromTo(pitch, { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 0.25);
+    }
+    if (stackPills && stackPills.length > 0) {
+      tl.fromTo(
+        stackPills,
+        { y: 20, opacity: 0, scale: 0.8 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.4, stagger: 0.05 },
+        0.35
+      );
+    }
+    if (highlights && highlights.length > 0) {
+      tl.fromTo(
+        highlights,
+        { x: -30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.5, stagger: 0.08 },
+        0.45
+      );
+    }
+    if (preview) {
+      tl.fromTo(preview, { y: 60, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.9 }, 0.2);
+    }
+    if (actionBtn) {
+      tl.fromTo(actionBtn, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 0.55);
+    }
   };
-
-  useGSAP(
-    () => {
-      const cards = listRef.current?.querySelectorAll(".editorial-project-row");
-      if (cards && cards.length > 0) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.08,
-            ease: "power3.out",
-            onComplete: () => {
-              isAnimatingTab.current = false;
-            },
-          }
-        );
-      } else {
-        isAnimatingTab.current = false;
-      }
-    },
-    { dependencies: [displayedFilter], scope: listRef }
-  );
 
   return (
     <section ref={sectionRef} id="projects" className="projects-section">
@@ -184,7 +256,7 @@ export const Projects: React.FC = () => {
         {/* Section Header */}
         <div className="projects-header">
           <div className="section-tag">
-            <span>// 02. FEATURED WORK</span>
+            <span>// 02. FEATURED WORK (VERTICAL 3D COVERFLOW)</span>
           </div>
 
           <div className="projects-title-wrap">
@@ -192,7 +264,7 @@ export const Projects: React.FC = () => {
               <span>Selected</span> Projects & <span>Case Studies</span>
             </h2>
             <p className="projects-subtitle">
-              Production web applications, full-stack e-commerce platforms, and AI systems engineered for high performance.
+              Scroll vertically to explore full-stack platforms with interactive 3D transitions & micro-animations.
             </p>
           </div>
 
@@ -200,121 +272,191 @@ export const Projects: React.FC = () => {
           <div className="project-filter-tabs">
             <button
               className={`filter-btn ${activeFilter === "all" ? "active" : ""}`}
-              onClick={() => handleFilterChange("all")}
+              onClick={() => setActiveFilter("all")}
             >
               All Work ({projectsData.length})
             </button>
             <button
               className={`filter-btn ${activeFilter === "ecommerce" ? "active" : ""}`}
-              onClick={() => handleFilterChange("ecommerce")}
+              onClick={() => setActiveFilter("ecommerce")}
             >
               E-Commerce ({projectsData.filter((p) => p.category === "ecommerce").length})
             </button>
             <button
               className={`filter-btn ${activeFilter === "analytics" ? "active" : ""}`}
-              onClick={() => handleFilterChange("analytics")}
+              onClick={() => setActiveFilter("analytics")}
             >
               Analytics ({projectsData.filter((p) => p.category === "analytics").length})
             </button>
             <button
               className={`filter-btn ${activeFilter === "ai" ? "active" : ""}`}
-              onClick={() => handleFilterChange("ai")}
+              onClick={() => setActiveFilter("ai")}
             >
               AI Systems ({projectsData.filter((p) => p.category === "ai").length})
             </button>
           </div>
         </div>
 
-        {/* Full-Width Editorial Rows Showcase */}
-        <div ref={listRef} className="editorial-projects-list">
-          {filteredProjects.map((project) => (
-            <article key={project.id} className="editorial-project-row">
-              <div className="row-ambient-background" style={{ background: project.accentGradient }}></div>
+        {/* 3D Vertical/Horizontal Swiper Container */}
+        <div
+          className="projects-swiper-wrapper"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <Swiper
+            key={isMobile ? "mobile-swiper" : "desktop-swiper"}
+            direction={isMobile ? "horizontal" : "vertical"}
+            effect="coverflow"
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView={1}
+            speed={1100}
+            mousewheel={{
+              releaseOnEdges: true,
+              thresholdDelta: 15,
+            }}
+            coverflowEffect={{
+              rotate: isMobile ? 15 : 35,
+              stretch: 0,
+              depth: isMobile ? 60 : 140,
+              modifier: 1,
+              slideShadows: false,
+            }}
+            modules={[EffectCoverflow, Mousewheel, Pagination]}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+              triggerSlideAnimations(swiper);
+            }}
+            onSlideChangeTransitionStart={(swiper) => {
+              triggerSlideAnimations(swiper);
+            }}
+            className="projects-swiper"
+          >
+            {filteredProjects.map((project) => (
+              <SwiperSlide key={project.id} className="editorial-project-slide">
+                <article className="editorial-project-row">
+                  <div
+                    className="row-ambient-background"
+                    style={{ background: project.accentGradient }}
+                  ></div>
 
-              <div className="row-content-grid">
-                {/* Left Column: Index & Project Details */}
-                <div className="row-left">
-                  <div className="row-meta">
-                    <span className="row-num">{project.num}</span>
-                    <span className="row-tagline">{project.tagline}</span>
-                  </div>
+                  <div className="row-content-grid">
+                    {/* Left Column: Index & Project Details */}
+                    <div className="row-left">
+                      <div className="row-meta">
+                        <span className="row-num">{project.num}</span>
+                        <span className="row-tagline">{project.tagline}</span>
+                      </div>
 
-                  <h3 className="row-title">{project.title}</h3>
-                  <p className="row-pitch">{project.pitch}</p>
+                      <h3 className="row-title">{project.title}</h3>
+                      <p className="row-pitch">{project.pitch}</p>
 
-                  {/* Tech Stack Pills */}
-                  <div className="row-stack">
-                    {project.stack.map((tech, idx) => (
-                      <span key={idx} className="tech-pill">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                      {/* Tech Stack Pills */}
+                      <div className="row-stack">
+                        {project.stack.map((tech, idx) => (
+                          <span key={idx} className="tech-pill">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
 
-                  {/* Key Highlights */}
-                  <ul className="row-highlights">
-                    {project.highlights.map((item, idx) => (
-                      <li key={idx}>
-                        <span className="highlight-bullet">✦</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                      {/* Key Highlights */}
+                      <ul className="row-highlights">
+                        {project.highlights.map((item, idx) => (
+                          <li key={idx}>
+                            <span className="highlight-bullet">✦</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
 
-                  {/* Metric Placeholder */}
-                  {project.metricPlaceholder && (
-                    <div className="metric-placeholder-box">
-                      <span className="metric-icon">⚡</span>
-                      <span className="metric-text">{project.metricPlaceholder}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Right Column: Visual Preview Panel & Action CTA */}
-                <div className="row-right">
-                  <div className="preview-panel">
-                    <div className="panel-badge-bar">
-                      {project.domain && <span className="domain-pill">{project.domain}</span>}
-                      {project.isPrivate ? (
-                        <span className="badge-private-pill">
-                          <FaLock size={10} /> Private Project
-                        </span>
-                      ) : (
-                        <span className="badge-live-pill">
-                          <span className="live-dot-green"></span> Live Store
-                        </span>
+                      {/* Metric Placeholder */}
+                      {project.metricPlaceholder && (
+                        <div className="metric-placeholder-box">
+                          <span className="metric-icon">⚡</span>
+                          <span className="metric-text">{project.metricPlaceholder}</span>
+                        </div>
                       )}
                     </div>
 
-                    <div className="panel-center-graphic">
-                      <div className="graphic-symbol">{project.title.charAt(0)}</div>
-                      <p className="graphic-title">{project.title}</p>
+                    {/* Right Column: Visual Preview Panel & Action CTA */}
+                    <div className="row-right">
+                      <div className="preview-panel">
+                        <div className="panel-badge-bar">
+                          {project.domain && <span className="domain-pill">{project.domain}</span>}
+                          {project.isPrivate ? (
+                            <span className="badge-private-pill">
+                              <FaLock size={10} /> Private Project
+                            </span>
+                          ) : (
+                            <span className="badge-live-pill">
+                              <span className="live-dot-green"></span> Live Store
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="panel-center-graphic">
+                          <div className="graphic-symbol">{project.bgSymbol}</div>
+                          <p className="graphic-title">{project.title}</p>
+                        </div>
+                      </div>
+
+                      {/* Action Link Button */}
+                      <div className="row-action">
+                        {!project.isPrivate && project.link ? (
+                          <a
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="row-link-btn"
+                          >
+                            <span>Explore Live Store</span>
+                            <FiArrowUpRight size={18} className="arrow-icon" />
+                          </a>
+                        ) : (
+                          <div className="row-private-label">
+                            <FaLock size={12} />
+                            <span>Internal Client Architecture</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
+                </article>
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
-                  {/* Action Link Button */}
-                  <div className="row-action">
-                    {!project.isPrivate && project.link ? (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="row-link-btn"
-                      >
-                        <span>Explore Live Store</span>
-                        <FiArrowUpRight size={18} className="arrow-icon" />
-                      </a>
-                    ) : (
-                      <div className="row-private-label">
-                        <FaLock size={12} />
-                        <span>Internal Client Architecture</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
+          {/* Sleek Vertical Step Progress Pagination */}
+          <div className="projects-step-pagination">
+            {filteredProjects.map((proj, idx) => (
+              <button
+                key={proj.id}
+                onClick={() => swiperRef.current?.slideTo(idx)}
+                className={`step-btn ${activeSlideIndex === idx ? "active" : ""}`}
+                title={proj.title}
+                aria-label={`Go to slide ${proj.num}`}
+              >
+                <span className="step-num">{proj.num}</span>
+                <span className="step-bar"></span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll / Swipe Indicator */}
+        <div className="projects-scroll-hint">
+          {isMobile ? (
+            <>
+              <span>Swipe Horizontally</span>
+              <FaArrowRightLong className="scroll-arrow-anim" size={12} />
+            </>
+          ) : (
+            <>
+              <span>Scroll Down</span>
+              <FaChevronDown className="scroll-arrow-anim" size={12} />
+            </>
+          )}
         </div>
       </div>
     </section>

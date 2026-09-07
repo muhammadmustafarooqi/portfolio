@@ -43,10 +43,10 @@ export const Contact: React.FC = () => {
             </div>
 
             <div className="social-links">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="GitHub Profile">
+              <a href="https://github.com/muhammadmustafarooqi" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="GitHub Profile">
                 <FaGithub size={18} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="LinkedIn Profile">
+              <a href="https://www.linkedin.com/in/muhammad-mustafa-hussain-72b003274/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="LinkedIn Profile">
                 <FaLinkedin size={18} />
               </a>
             </div>
